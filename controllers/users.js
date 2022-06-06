@@ -70,26 +70,36 @@ module.exports.getAutorizedUser = (req, res, next) => {
 module.exports.updateProfile = (req, res, next) => {
   const userId = req.user._id;
   const { name, email } = req.body;
-  User.findByIdAndUpdate(
-    userId,
-    { name, email },
-    {
-      new: true, // обработчик then получит на вход обновлённую запись
-      runValidators: true, // данные будут валидированы перед изменением
-    },
-  )
+  User.findOne({ email })
     .then((user) => {
-      if (!user) {
-        next(new NotFoundError('User not found.'));
+      if (user) {
+        next(new ConflictError('This email address is already in use.'));
       } else {
-        res.send(user);
+        User.findByIdAndUpdate(
+          userId,
+          { name, email },
+          {
+            new: true, // обработчик then получит на вход обновлённую запись
+            runValidators: true, // данные будут валидированы перед изменением
+          },
+        )
+          .then((foundUser) => {
+            if (!foundUser) {
+              next(new NotFoundError('User not found.'));
+            } else {
+              res.send(foundUser);
+            }
+          })
+          .catch((err) => {
+            if (err.name === 'ValidationError') {
+              next(new BadRequestError('Data is not valid.'));
+            } else {
+              next(new InternalServerError());
+            }
+          });
       }
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Data is not valid.'));
-      } else {
-        next(new InternalServerError());
-      }
+    .catch(() => {
+      next(new InternalServerError());
     });
 };

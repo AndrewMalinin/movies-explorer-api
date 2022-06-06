@@ -1,7 +1,7 @@
 const router = require('express').Router();
+const validator = require('validator');
 const { celebrate, Joi } = require('celebrate');
 const movieController = require('../controllers/movies');
-const URL_REGEXP = require('../utils/regexps');
 
 router.get('/', movieController.getAllMovies);
 
@@ -12,13 +12,12 @@ router.post('/', celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    thumbnail: Joi.string().required().pattern(URL_REGEXP),
-    image: Joi.string().required().pattern(URL_REGEXP),
-    trailerLink: Joi.string().required().pattern(URL_REGEXP),
+    thumbnail: Joi.string().required().custom((value, helpers) => (validator.isURL(value) ? value : helpers.message('Invalid URL'))),
+    image: Joi.string().required().custom((value, helpers) => (validator.isURL(value) ? value : helpers.message('Invalid URL'))),
+    trailerLink: Joi.string().required().custom((value, helpers) => (validator.isURL(value) ? value : helpers.message('Invalid URL'))),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    movieId: Joi.string().required(),
-    link: Joi.string().required().pattern(URL_REGEXP),
+    movieId: Joi.number().required(),
   }),
 }), movieController.createMovie);
 

@@ -17,14 +17,14 @@ router.use('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
   }),
 }), register);
 
 router.use('/users', auth, usersRouter);
 router.use('/movies', auth, moviesRouter);
 
-router.use((req, res, next) => {
+router.use(auth, (req, res, next) => {
   next(new NotFoundError('Запрашиваемый путь не существует.'));
 });
 

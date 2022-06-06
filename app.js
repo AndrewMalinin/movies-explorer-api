@@ -39,12 +39,9 @@ app.use(errorHandler);
 mongoose.connect(DB_ADDRESS, {
   useNewUrlParser: true,
 })
-  // eslint-disable-next-line no-console
   .then(() => console.log('Database connected!'))
-  // eslint-disable-next-line no-console
   .catch((err) => console.log(`Database connection error: ${err.name} (${err.message})`));
 
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
 });

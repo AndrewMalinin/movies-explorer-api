@@ -1,7 +1,7 @@
 {
   "name": "movies-explorer-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Бэкэнд дипломного проекта Movies-explorer, со следующими возможностями: авторизации и регистрации пользователей, операции с фильмами и пользователями.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

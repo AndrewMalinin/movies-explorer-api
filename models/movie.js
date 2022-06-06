@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
   country: {
@@ -26,24 +27,24 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (value) => /^(https?:\/\/)(www\.)?([\w\-._~:/?#[\]@!$&'()*+,;=]+)/.test(value),
-      message: (props) => `Значение: ${props.value} имеет неверный формат!`,
+      validator: (value) => validator.isURL(value),
+      message: 'Invalid URL',
     },
   },
   trailerLink: {
     type: String,
     required: true,
     validate: {
-      validator: (value) => /^(https?:\/\/)(www\.)?([\w\-._~:/?#[\]@!$&'()*+,;=]+)/.test(value),
-      message: (props) => `Значение: ${props.value} имеет неверный формат!`,
+      validator: (value) => validator.isURL(value),
+      message: 'Invalid URL',
     },
   },
   thumbnail: {
     type: String,
     required: true,
     validate: {
-      validator: (value) => /^(https?:\/\/)(www\.)?([\w\-._~:/?#[\]@!$&'()*+,;=]+)/.test(value),
-      message: (props) => `Значение: ${props.value} имеет неверный формат!`,
+      validator: (value) => validator.isURL(value),
+      message: 'Invalid URL',
     },
   },
   owner: {
@@ -52,7 +53,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   movieId: {
-    type: String,
+    type: Number,
     required: true,
   },
   nameRU: {

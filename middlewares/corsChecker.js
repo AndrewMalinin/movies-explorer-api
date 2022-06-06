@@ -1,4 +1,3 @@
-// eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   const { method } = req;
@@ -9,4 +8,5 @@ module.exports = (req, res, next) => {
     return res.end();
   }
   next();
+  return 0;
 };
