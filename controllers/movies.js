@@ -25,16 +25,17 @@ module.exports.createMovie = (req, res, next) => {
 
 module.exports.deleteMovie = (req, res, next) => {
   const { movieId } = req.params;
-  Movie.findById(movieId)
+  Movie.findOne({ movieId })
     .then((movie) => {
       if (movie === null) {
         next(new NotFoundError('Movie not found.'));
       } else if (movie.owner.valueOf() === req.user._id) {
-        Movie.findByIdAndRemove(movieId)
+        Movie.findByIdAndRemove(movie._id)
           .then(() => {
             res.send(movie);
           })
-          .catch(() => {
+          .catch((err) => {
+            console.log(err)
             next(new InternalServerError());
           });
       } else {
